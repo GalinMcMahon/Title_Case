@@ -1,14 +1,21 @@
 require('rspec')
-require('title_case')
-require('capybara/rspec')
-require('./app')
-Capybara.app = Sinatra::Application
+require('./lib/title_case')
 
-describe('String#title_case', {:type => :feature}) do
-  it('processes the user entry and returns it title cased') do
-    visit('/')
-    fill_in('title', :with => 'green eggs and ham')
-    click_button('Send')
-    expect(page).to have_content('Green Eggs and Ham')
+describe('String#title_case') do
+  it("capitalizes the first letter of a word") do
+    expect(("beowulf").title_case()).to(eq("Beowulf"))
   end
+
+  it("capitalizes multiple word titles") do
+    expect(("beowulf begins").title_case()).to(eq("Beowulf Begins"))
+  end
+
+  it("does not capitalize designated words that are after the first word") do
+    expect(("from beowulf to the incredible hulk").title_case()).to(eq("From Beowulf to the Incredible Hulk"))
+  end
+
+  it("handles mixed case entries") do
+    expect(("This old beoWulf").title_case()).to(eq("This Old Beowulf"))
+  end
+
 end
